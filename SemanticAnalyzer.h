@@ -36,6 +36,17 @@ private:
                 if (leftType != rightType) {
                     throw std::runtime_error("Type mismatch in binary expression");
                 }
+
+                switch (binary->operator_){
+                    case TokenType::EQUAL:
+                    case TokenType::NOT_EQUAL:
+                    case TokenType::LESS:
+                    case TokenType::LESS_EQUAL:
+                    case TokenType::GREATER:
+                    case TokenType::GREATER_EQUAL:
+                        return "bool"; // 비교 연산자는 항상 bool 반환
+                    
+                }
                 
                 return leftType;
             }
@@ -82,9 +93,8 @@ private:
         return "void";
     }
     
-    void analyzeStatement(ASTNode* node) {
+    void analyzeStatement(ASTNode* node, std::string expectedType = "") {
         if (!node) return;
-        
         switch (node->type) {
             case NodeType::VARIABLE_DECLARATION: {
                 auto var = static_cast<VariableDeclaration*>(node);
@@ -121,7 +131,7 @@ private:
                 }
                 
                 if (func->body) {
-                    analyzeStatement(func->body.get());
+                    analyzeStatement(func->body.get(), func->returnType);
                 }
                 
                 symbolTable.popScope();
@@ -132,7 +142,7 @@ private:
                 symbolTable.pushScope();
                 
                 for (const auto& stmt : block->statements) {
-                    analyzeStatement(stmt.get());
+                    analyzeStatement(stmt.get(), expectedType);
                 }
                 
                 symbolTable.popScope();
@@ -166,13 +176,28 @@ private:
             case NodeType::RETURN_STATEMENT: {
                 auto returnStmt = static_cast<ReturnStatement*>(node);
                 if (returnStmt->expression) {
-                    analyzeExpression(returnStmt->expression.get());
+                    std::string returnType = analyzeExpression(returnStmt->expression.get());
+                    printf("Expected return type: %s\n", expectedType.c_str());
+                    printf("Actual return type: %s\n", returnType.c_str());
+                    if (expectedType.compare(returnType)!=0){
+                        throw std::runtime_error("Return type mismatch: expected " + expectedType + ", got " + returnType);
+                    }
                 }
                 break;
             }
             case NodeType::EXPRESSION_STATEMENT: {
                 auto exprStmt = static_cast<ExpressionStatement*>(node);
                 analyzeExpression(exprStmt->expression.get());
+                break;
+            }
+            case NodeType::NAMESPACE_DECLARATION:{
+                NamespaceDeclaration* ns = static_cast<NamespaceDeclaration*>(node);
+                symbolTable.pushScope();
+                if (ns->body) {
+                    analyzeStatement(ns->body.get());
+                    
+                }
+                symbolTable.popScope();
                 break;
             }
             default:
