@@ -1,5 +1,3 @@
-#ifndef UNARY_EXPRESSION_H
-#define UNARY_EXPRESSION_H
 #include "../ASTNode.h"
 #include "../TokenType.h"
 #include <memory>
@@ -10,4 +8,3 @@ struct UnaryExpression : ASTNode {
     
     UnaryExpression() { type = NodeType::UNARY_EXPRESSION; }
 };
-#endif // UNARY_EXPRESSION_H

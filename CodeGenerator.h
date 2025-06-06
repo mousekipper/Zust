@@ -1,5 +1,3 @@
-#ifndef CODEGENERATOR_H
-#define CODEGENERATOR_H
 #include <sstream>
 #include "AST/AST.h"
 
@@ -242,4 +240,3 @@ public:
         return output.str();
     }
 };
-#endif // CODEGENERATOR_H

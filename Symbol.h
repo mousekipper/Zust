@@ -1,5 +1,3 @@
-#ifndef SYMBOL_H
-#define SYMBOL_H
 #include <string>
 #include <vector>
 
@@ -15,4 +13,3 @@ struct Symbol {
     Symbol(const std::string& n, const std::string& t, bool func = false) 
         : name(n), type(t), isFunction(func) {}
 };
-#endif // SYMBOL_H

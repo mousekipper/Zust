@@ -1,5 +1,3 @@
-#ifndef COMPILER_ERROR_H
-#define COMPILER_ERROR_H
 #include <exception>
 #include <string>
 
@@ -41,4 +39,3 @@ public:
         }
     }
 };
-#endif // COMPILER_ERROR_H

@@ -18,7 +18,7 @@ enum class TokenType {
     BIT_AND, BIT_OR, BIT_XOR, BIT_NOT, LEFT_SHIFT, RIGHT_SHIFT,
     
     // 구분자
-    SEMICOLON, COMMA, DOT,
+    SEMICOLON, COLON, COMMA, DOT,
     LPAREN, RPAREN, LBRACE, RBRACE, LBRACKET, RBRACKET,
     
     // 리터럴

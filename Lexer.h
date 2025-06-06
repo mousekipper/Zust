@@ -243,6 +243,7 @@ public:
                     case '^': advance(); tokens.emplace_back(TokenType::BIT_XOR, "^", startLine, startCol); break;
                     case '~': advance(); tokens.emplace_back(TokenType::BIT_NOT, "~", startLine, startCol); break;
                     case ';': advance(); tokens.emplace_back(TokenType::SEMICOLON, ";", startLine, startCol); break;
+                    case ':': advance(); tokens.emplace_back(TokenType::COLON, ":", startLine, startCol); break;
                     case ',': advance(); tokens.emplace_back(TokenType::COMMA, ",", startLine, startCol); break;
                     case '.': advance(); tokens.emplace_back(TokenType::DOT, ".", startLine, startCol); break;
                     case '(': advance(); tokens.emplace_back(TokenType::LPAREN, "(", startLine, startCol); break;

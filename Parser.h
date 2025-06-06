@@ -152,10 +152,14 @@ public:
         expect(TokenType::RPAREN);
         
         // 반환 타입 (선택적)
-        if (current().type == TokenType::SEMICOLON) {
-            pos++;
-            func->returnType = "void";
-            return std::move(func);
+        if (current().type == TokenType::COLON) {
+            expect(TokenType::COLON);
+            if (isDataType(current().type)) {
+                func->returnType = current().value;
+                pos++;
+            }
+        }else{
+            func->returnType = "auto"; // 기본 반환 타입
         }
         
         skipNewlines();
@@ -177,7 +181,7 @@ public:
             pos++;
         }
         
-        if (match(TokenType::COMMA)) {
+        if (match(TokenType::COLON)) {
             // 타입 지정
             if (isDataType(current().type)) {
                 var->dataType = current().value;
@@ -208,6 +212,8 @@ public:
                 return parseReturnStatement();
             case TokenType::LET:
                 return parseVariableDeclaration();
+            case TokenType::FN:
+                return parseFunctionDeclaration();
             default:
                 return parseExpressionStatement();
         }

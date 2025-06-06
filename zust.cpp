@@ -17,7 +17,7 @@ int main(int argc, char* argv[]) {
             std::string testCode = R"(
 # 테스트 프로그램
 namespace TestNamespace {
-    fn add(int a, int b) {
+    fn add(int a, int b): int {
         return a + b;
     }
     

@@ -1,6 +1,5 @@
 #ifndef AST_BLOCK_STATEMENT_H
 #define AST_BLOCK_STATEMENT_H
-
 #include "../ASTNode.h"
 #include <vector>
 #include <memory>

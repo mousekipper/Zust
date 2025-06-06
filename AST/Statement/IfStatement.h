@@ -1,5 +1,3 @@
-#ifndef IFSTATEMENT_H
-#define IFSTATEMENT_H
 #include "../ASTNode.h"
 #include <memory>
 struct IfStatement : ASTNode {
@@ -9,4 +7,3 @@ struct IfStatement : ASTNode {
     
     IfStatement() { type = NodeType::IF_STATEMENT; }
 };
-#endif // IFSTATEMENT_H

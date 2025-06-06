@@ -1,5 +1,3 @@
-#ifndef FUNCTION_DECLARATION_H
-#define FUNCTION_DECLARATION_H
 struct FunctionDeclaration : ASTNode {
     std::string returnType;
     std::string name;
@@ -8,5 +6,3 @@ struct FunctionDeclaration : ASTNode {
     
     FunctionDeclaration() { type = NodeType::FUNCTION_DECLARATION; }
 };
-
-#endif // FUNCTION_DECLARATION_H
