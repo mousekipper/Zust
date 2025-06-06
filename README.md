@@ -8,7 +8,7 @@ Zust is tiny, easy to use.
 
 
 # Grammer
-
+```
 <LETTER>         ::= 'A' | 'B' | ... | 'Z' | 'a' | 'b' | ... | 'z' | '_'
 <DIGIT>          ::= '0' | '1' | ... | '9'
 <HEX_DIGIT>      ::= '0' | ... | '9' | 'A' | ... | 'F' | 'a' | ... | 'f'
@@ -44,15 +44,15 @@ Zust is tiny, easy to use.
 'false'    'class'   'struct'   'namespace' 'import'   'try'     'catch'
 'throw'    'const'     'static'   'public'  'private'  'new'
 'protected' 'extends' 'enum'    'void'      'bool'     'char'    'short'
-'int'      'long'    'float'    'double'    'byte'     'this'    # 등
+'int'      'long'    'float'    'double'    'byte'     'this'
 
 # Operator:
-'+'   '-'   '*'   '/'   '%'     # 산술
-'&'   '|'   '^'   '~'   '<<'  '>>' # 비트
-'=='  '!='  '<'   '>'   '<='  '>=' # 비교
-'&&'  '||'  '!'                  # 논리
-'='   '+='  '-='  '*='  '/='     # 할당
-'%='  '&='  '|='  '^='  '<<='     # 복합 할당
+'+'   '-'   '*'   '/'   '%'     
+'&'   '|'   '^'   '~'   '<<'  '>>' 
+'=='  '!='  '<'   '>'   '<='  '>=' 
+'&&'  '||'  '!'
+'='   '+='  '-='  '*='  '/='
+'%='  '&='  '|='  '^='  '<<='
 
 # Delimiter:
 ';'   ','   '.'   '('   ')'   '{'   '}'   '['   ']'   ':'   '?'   '#'
@@ -247,3 +247,4 @@ Zust is tiny, easy to use.
                  | <AccessModifier> ':'
 
 <COMMENT> ::= '#' { any character except newline } newline****
+```
