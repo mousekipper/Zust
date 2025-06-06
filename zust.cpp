@@ -1010,10 +1010,15 @@ struct Symbol {
     std::string type;
     bool isFunction;
     std::vector<std::string> paramTypes;
-    
-    Symbol(const std::string& n, const std::string& t, bool func = false) 
+
+
+    Symbol() : name(""), type(""), isFunction(false) {}
+
+
+    Symbol(const std::string& n, const std::string& t, bool func = false)
         : name(n), type(t), isFunction(func) {}
 };
+
 
 class SymbolTable {
 private:
@@ -1566,7 +1571,7 @@ public:
 int main(int argc, char* argv[]) {
     try {
         Compiler compiler;
-        
+
         if (argc == 3) {
             // 파일 컴파일 모드
             compiler.compileFile(argv[1], argv[2]);
@@ -1574,40 +1579,35 @@ int main(int argc, char* argv[]) {
         } else {
             // 테스트 모드
             std::string testCode = R"(
-# 테스트 프로그램
-namespace TestNamespace {
-    fn add(int a, int b) {
-        return a + b;
-    }
-    
-    fn main() {
-        let x: int = 10;
-        let y: int = 20;
-        let result: int = add(x, y);
-        
-        if (result > 25) {
-            let message: string = "Result is greater than 25";
-        }
-        
-        let i: int = 0;
-        while (i < 5) {
-            i = i + 1;
-        }
-        
-        return 0;
-    }
-}
-)";
-            
+            fn main() {
+                print(1); // 정수 출력
+                print(3.14); // 실수 출력
+                print("Hello, World!"); // 문자열 출력
+                print(true); // 불리언 값 출력
+            }
+            )";
+
             std::string result = compiler.compile(testCode);
-            std::cout << "Generated C++ Code:\n" << std::endl;
+            
+            // --- 코드 출력 순서 변경 및 "Generated C++ Code:" 처리 ---
+            // 1. C++ 헤더 및 print 함수 오버로드 구현 먼저 출력
+            std::cout << "#include <iostream>\n";
+            std::cout << "#include <string>\n\n";
+            std::cout << "void print(int value) { std::cout << value << std::endl; }\n";
+            std::cout << "void print(double value) { std::cout << value << std::endl; }\n";
+            std::cout << "void print(const std::string& value) { std::cout << value << std::endl; }\n";
+            std::cout << "void print(bool value) { std::cout << (value ? \"true\" : \"false\") << std::endl; }\n\n";
+
+            // 2. 선택적으로 주석 처리된 정보 추가 (원한다면)
+            std::cout << "// Generated C++ Code:\n\n"; // 주석 처리하여 컴파일러가 무시하도록 함
+
+            // 3. 실제 컴파일된 코드 (main 함수 등) 출력
             std::cout << result << std::endl;
         }
-        
     } catch (const std::exception& e) {
         std::cerr << "Error: " << e.what() << std::endl;
         return 1;
     }
-    
+
     return 0;
 }
