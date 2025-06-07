@@ -21,7 +21,7 @@ namespace TestNamespace {
         return a + b;
     }
     
-    fn main(): int {
+    fn main()  {
         let x: int = 10;
         let y: int = 20;
         let result: int = add(x, y);

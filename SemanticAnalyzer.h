@@ -1,6 +1,8 @@
 #ifndef SEMANTIC_ANALYZER_H
 #define SEMANTIC_ANALYZER_H
 #include "SymbolTable.h"
+#include "AST/AST.h"
+#include "Program.h"
 
 // ===== 의미 분석기 =====
 class SemanticAnalyzer {
@@ -93,7 +95,7 @@ private:
         return "void";
     }
     
-    void analyzeStatement(ASTNode* node, std::string expectedType = "") {
+    void analyzeStatement(ASTNode* node, std::string* expectedType = nullptr) {
         if (!node) return;
         switch (node->type) {
             case NodeType::VARIABLE_DECLARATION: {
@@ -131,7 +133,7 @@ private:
                 }
                 
                 if (func->body) {
-                    analyzeStatement(func->body.get(), func->returnType);
+                    analyzeStatement(func->body.get(), &(func->returnType));
                 }
                 
                 symbolTable.popScope();
@@ -177,10 +179,11 @@ private:
                 auto returnStmt = static_cast<ReturnStatement*>(node);
                 if (returnStmt->expression) {
                     std::string returnType = analyzeExpression(returnStmt->expression.get());
-                    printf("Expected return type: %s\n", expectedType.c_str());
-                    printf("Actual return type: %s\n", returnType.c_str());
-                    if (expectedType.compare(returnType)!=0){
-                        throw std::runtime_error("Return type mismatch: expected " + expectedType + ", got " + returnType);
+                    if (*expectedType == "auto"){
+                        *expectedType = returnType; // auto 타입 추론
+                    }
+                    if (expectedType->compare(returnType)!=0){
+                        throw std::runtime_error("Return type mismatch: expected " + *expectedType + ", got " + returnType);
                     }
                 }
                 break;
