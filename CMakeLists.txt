@@ -9,5 +9,9 @@ project(
 add_executable(
   Zust
   zust.cpp
-  Parser.cpp
+  ParserExpression.cpp
+  ParserStatement.cpp
+  ParserDeclaration.cpp
+  CodeGeneratorExpression.cpp
+  CodeGeneratorStatement.cpp
 )
