@@ -112,6 +112,10 @@ std::unique_ptr<ASTNode> ccfn parseVariableDeclaration() {
             var->dataType = current().value;
             pos++;
         }
+    }else{
+        // 타입이 지정되지 않은 경우, 기본적으로 auto로 설정
+        var->dataType = "auto";
+
     }
     
     if (match(TokenType::ASSIGN)) {

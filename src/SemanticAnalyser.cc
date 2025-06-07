@@ -35,8 +35,17 @@ std::string ccfn analyzeExpression(ASTNode* node) {
             if (leftType != rightType) {
                 throw std::runtime_error("Type mismatch in binary expression");
             }
-            
-            return leftType;
+            switch (binary->operator_) {
+                case TokenType::EQUAL:
+                case TokenType::NOT_EQUAL:
+                case TokenType::LESS:
+                case TokenType::GREATER:
+                case TokenType::LESS_EQUAL:
+                case TokenType::GREATER_EQUAL:
+                    return "bool"; // 비교 연산은 항상 bool
+                default:
+                    return leftType;
+            }
         }
         case NodeType::ASSIGNMENT_EXPRESSION: {
             auto assignment = static_cast<Node<NodeType::ASSIGNMENT_EXPRESSION>*>(node);
@@ -81,7 +90,7 @@ std::string ccfn analyzeExpression(ASTNode* node) {
     return "void";
 }
 
-void ccfn analyzeStatement(ASTNode* node) {
+void ccfn analyzeStatement(ASTNode* node, std::string* expectedType) {
     if (!node) return;
     
     switch (node->type) {
@@ -90,7 +99,8 @@ void ccfn analyzeStatement(ASTNode* node) {
             
             if (var->initializer) {
                 std::string initType = analyzeExpression(var->initializer.get());
-                if (!var->dataType.empty() && var->dataType != initType) {
+                
+                if (!var->dataType.empty() && (var->dataType != initType) && initType != "auto") {
                     throw std::runtime_error("Type mismatch in variable declaration: " + var->name);
                 }
                 if (var->dataType.empty()) {
@@ -120,7 +130,7 @@ void ccfn analyzeStatement(ASTNode* node) {
             }
             
             if (func->body) {
-                analyzeStatement(func->body.get());
+                analyzeStatement(func->body.get(), &(func->returnType));
             }
             
             symbolTable.popScope();
@@ -131,7 +141,7 @@ void ccfn analyzeStatement(ASTNode* node) {
             symbolTable.pushScope();
             
             for (const auto& stmt : block->statements) {
-                analyzeStatement(stmt.get());
+                analyzeStatement(stmt.get(), expectedType);
             }
             
             symbolTable.popScope();
@@ -165,13 +175,39 @@ void ccfn analyzeStatement(ASTNode* node) {
         case NodeType::RETURN_STATEMENT: {
             auto returnStmt = static_cast<Node<NodeType::RETURN_STATEMENT>*>(node);
             if (returnStmt->expression) {
-                analyzeExpression(returnStmt->expression.get());
+                std::string returnType = analyzeExpression(returnStmt->expression.get());
+                if (*expectedType =="auto") {
+                    *expectedType = returnType; // auto 타입 추론
+                    break;
+                }
+                if (expectedType->compare(returnType) != 0) {
+                    throw std::runtime_error("Return type mismatch: expected " + *expectedType + ", got " + returnType);
+                }
+            }else{
+                if (*expectedType == "auto"){
+                    *expectedType = "void";
+                    break;
+                }
+                if (*expectedType != "void"){
+                    throw std::runtime_error("Return statement expected type: " + *expectedType);
+                }
             }
+
             break;
         }
         case NodeType::EXPRESSION_STATEMENT: {
             auto exprStmt = static_cast<Node<NodeType::EXPRESSION_STATEMENT>*>(node);
             analyzeExpression(exprStmt->expression.get());
+            break;
+        }
+
+        case NodeType::NAMESPACE_DECLARATION:{
+            auto nsDecl = static_cast<Node<NodeType::NAMESPACE_DECLARATION>*>(node);
+            symbolTable.pushScope(); // 네임스페이스 스코프 시작
+            if (nsDecl->body){
+                analyzeStatement(nsDecl->body.get());
+            }
+            symbolTable.popScope(); // 네임스페이스 스코프 종료
             break;
         }
         default:

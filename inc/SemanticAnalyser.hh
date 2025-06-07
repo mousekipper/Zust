@@ -14,7 +14,7 @@ class SemanticAnalyser {
 private:
     SymbolTable symbolTable;
     std::string ccfn analyzeExpression(ASTNode* node);
-    void ccfn analyzeStatement(ASTNode* node);
+    void ccfn analyzeStatement(ASTNode* node, std::string* expectedType = nullptr);
 
 public:
     void ccfn analyze(Program* program);
