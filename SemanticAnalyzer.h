@@ -181,9 +181,18 @@ private:
                     std::string returnType = analyzeExpression(returnStmt->expression.get());
                     if (*expectedType == "auto"){
                         *expectedType = returnType; // auto 타입 추론
+                        break;
                     }
                     if (expectedType->compare(returnType)!=0){
                         throw std::runtime_error("Return type mismatch: expected " + *expectedType + ", got " + returnType);
+                    }
+                }else{
+                    if (*expectedType == "auto") {
+                        *expectedType = "void"; // auto 타입 추론
+                        break;
+                    }
+                    if (*expectedType != "void") {
+                        throw std::runtime_error("Return type mismatch: expected " + *expectedType + ", got void");
                     }
                 }
                 break;
