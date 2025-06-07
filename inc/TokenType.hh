@@ -1,0 +1,35 @@
+#ifndef TokenType_hh
+#define TokenType_hh
+
+// ===== 토큰 정의 =====
+typedef enum class TokenType {
+    // 기타
+    NIL, COMMENT = NIL, NEWLINE, EOF_TOKEN, UNKNOWN,
+
+    // 키워드
+    LET, FN, IF, WHILE, FOR, FOREACH, SWITCH, CASE, DEFAULT,
+    NAMESPACE, IMPORT, RETURN, BREAK, CONTINUE,
+    
+    // 자료형
+    INT, FLOAT, CHAR, BYTE, LONG, DOUBLE, SHORT, BOOL,
+    STRING, VOID,
+    
+    // 연산자
+    PLUS, MINUS, MULTIPLY, DIVIDE, MODULO,
+    ASSIGN, EQUAL, NOT_EQUAL, LESS, GREATER, LESS_EQUAL, GREATER_EQUAL,
+    LOGICAL_AND, LOGICAL_OR, LOGICAL_NOT,
+    BIT_AND, BIT_OR, BIT_XOR, BIT_NOT, LEFT_SHIFT, RIGHT_SHIFT,
+    
+    // 구분자
+    COLUMN, SEMICOLON, COMMA, DOT,
+    LPAREN, RPAREN, LBRACE, RBRACE, LBRACKET, RBRACKET,
+    
+    // 리터럴
+    INTEGER_LITERAL, FLOAT_LITERAL, CHAR_LITERAL, STRING_LITERAL,
+    BOOL_LITERAL,
+    
+    // 식별자
+    IDENTIFIER,
+} TokenType;
+
+#endif
